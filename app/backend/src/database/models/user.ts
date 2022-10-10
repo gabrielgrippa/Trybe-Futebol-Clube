@@ -38,3 +38,5 @@ User.init({
   underscored: true,
   timestamps: false,
 });
+
+export default User;
