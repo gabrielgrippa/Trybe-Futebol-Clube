@@ -7,12 +7,20 @@ class UserService {
   private _user:User;
   private _token:string;
   private _secret: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
+  private _validEmail: boolean;
 
   public async generateToken() {
-    this._token = await jwt.sign({ data: this._user.email }, this._secret);
+    this._token = jwt.sign({ data: this._user.email }, this._secret);
+  }
+
+  public validation(credentials: IUser) {
+    const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    this._validEmail = regex.test(credentials.email);
   }
 
   public async login(credentials: IUser) {
+    this.validation(credentials);
+    if (!this._validEmail) return null;
     const userData = await User.findOne({ where: {
       email: credentials.email,
     } });
@@ -23,6 +31,7 @@ class UserService {
         await this.generateToken();
         return { code: 200, result: this._token };
       }
+      return null;
     }
   }
 }
