@@ -9,6 +9,13 @@ class UserService {
   private _secret: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
   private _validEmail: boolean;
 
+  public async findUser(email: string) {
+    const userData = await User.findOne({ where: {
+      email,
+    } });
+    if (userData) { this._user = userData; }
+  }
+
   public async generateToken() {
     this._token = jwt.sign({ data: this._user.email }, this._secret);
   }
@@ -21,18 +28,20 @@ class UserService {
   public async login(credentials: IUser) {
     this.validation(credentials);
     if (!this._validEmail) return null;
-    const userData = await User.findOne({ where: {
-      email: credentials.email,
-    } });
-    if (userData) {
-      this._user = userData;
-      const passwordCheck = bcrypt.compareSync(credentials.password, this._user.password);
-      if (passwordCheck) {
-        await this.generateToken();
-        return { code: 200, result: this._token };
-      }
-      return null;
+    await this.findUser(credentials.email);
+    const passwordCheck = bcrypt.compareSync(credentials.password, this._user.password);
+    if (passwordCheck) {
+      await this.generateToken();
+      return { code: 200, result: this._token };
     }
+    return null;
+  }
+
+  public async validate(authorization: string) {
+    const validation = jwt.verify(authorization, this._secret) as jwt.JwtPayload;
+    // https://stackoverflow.com/questions/68115189/argument-of-type-string-jwtpayload-is-not-assignable-to-parameter-of-type-s
+    await this.findUser(validation.data);
+    return this._user.role;
   }
 }
 

@@ -16,4 +16,12 @@ export default class UserController {
     if (!user) return res.status(401).json({ message: 'Incorrect email or password' });
     return res.status(user.code).json({ token: user.result });
   }
+
+  public async validate(req:Request, res: Response) {
+    const token = req.headers.authorization;
+    if (token) {
+      const role = await this.service.validate(token);
+      return res.status(200).json({ role });
+    }
+  }
 }
