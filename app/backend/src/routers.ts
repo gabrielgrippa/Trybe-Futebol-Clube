@@ -9,5 +9,6 @@ const teamController = new TeamController();
 routers.post('/login', (req: Request, res: Response) => userController.login(req, res));
 routers.get('/login/validate', (req: Request, res: Response) => userController.validate(req, res));
 routers.get('/teams', (req: Request, res: Response) => teamController.getAllTeams(req, res));
+routers.get('/teams/:id', (req: Request, res: Response) => teamController.getTeam(req, res));
 
 export default routers;
