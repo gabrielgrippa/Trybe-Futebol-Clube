@@ -13,5 +13,6 @@ routers.get('/login/validate', (req: Request, res: Response) => userController.v
 routers.get('/teams', (req: Request, res: Response) => teamController.getAllTeams(req, res));
 routers.get('/teams/:id', (req: Request, res: Response) => teamController.getTeam(req, res));
 routers.get('/matches', (req: Request, res: Response) => matchController.getAllMatches(req, res));
+routers.post('/matches', (req: Request, res: Response) => matchController.addNewMatch(req, res));
 
 export default routers;

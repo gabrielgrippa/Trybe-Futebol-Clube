@@ -1,9 +1,10 @@
 import Match from '../database/models/match';
 import Team from '../database/models/team';
+import INewMatch from '../entities/INewMatch';
 
 class MatchService {
   private _Matches: Match[] ;
-  private _Match: Match;
+  private _NewMatch: Match;
 
   public async getAllMatches() {
     const ast = await Match.findAll({
@@ -22,6 +23,18 @@ class MatchService {
     await this.getAllMatches();
     const result = this._Matches.filter((match) => match.inProgress === inProgress);
     return result;
+  }
+
+  public async addNewMatch(newMatch: INewMatch) {
+    const result = await Match.create({
+      homeTeam: newMatch.homeTeam,
+      homeTeamGoals: newMatch.homeTeamGoals,
+      awayTeam: newMatch.awayTeam,
+      awayTeamGoals: newMatch.awayTeamGoals,
+      inProgress: newMatch.inProgress,
+    });
+    this._NewMatch = result;
+    return this._NewMatch;
   }
 }
 
