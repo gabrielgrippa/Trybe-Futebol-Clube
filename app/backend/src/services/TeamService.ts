@@ -15,7 +15,7 @@ class TeamService {
       where: { id },
     });
     if (team) this._team = team;
-    return this._team;
+    return team;
   }
 }
 
