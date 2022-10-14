@@ -17,6 +17,12 @@ class MatchService {
     }
     return this._Matches;
   }
+
+  public async getFilteredMatches(inProgress: boolean) {
+    await this.getAllMatches();
+    const result = this._Matches.filter((match) => match.inProgress === inProgress);
+    return result;
+  }
 }
 
 export default MatchService;

@@ -9,7 +9,16 @@ export default class MatchController {
   }
 
   public async getAllMatches(req: Request, res: Response) {
-    const Matches = await this.service.getAllMatches();
+    if (req.query.inProgress) await this.getFilteredMatches(req, res);
+    else {
+      const Matches = await this.service.getAllMatches();
+      return res.status(200).json(Matches);
+    }
+  }
+
+  public async getFilteredMatches(req: Request, res: Response) {
+    const Matches = await this.service
+      .getFilteredMatches(req.query.inProgress === 'true');
     return res.status(200).json(Matches);
   }
 }
