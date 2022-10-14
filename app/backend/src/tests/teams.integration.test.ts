@@ -35,7 +35,7 @@ describe('/teams', () => {
     it('Deve retornar todos os times', async () => {
       const response = await chai.request(app).get('/teams');
       expect(response.status).to.be.equal(200);
-      expect(response.body).to.be('array');
+      expect(response.body).to.be.an('array');
     });
   })
 });
