@@ -14,6 +14,7 @@ routers.get('/teams', (req: Request, res: Response) => teamController.getAllTeam
 routers.get('/teams/:id', (req: Request, res: Response) => teamController.getTeam(req, res));
 routers.get('/matches', (req: Request, res: Response) => matchController.getAllMatches(req, res));
 routers.post('/matches', (req: Request, res: Response) => matchController.addNewMatch(req, res));
+routers.patch('/matches/:id', (req: Request, res: Response) => matchController.editMatch(req, res));
 routers.patch('/matches/:id/finish', (req: Request, res: Response) => matchController
   .endMatch(req, res));
 

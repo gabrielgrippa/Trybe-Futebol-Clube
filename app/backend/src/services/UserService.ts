@@ -38,10 +38,14 @@ class UserService {
   }
 
   public async validate(authorization: string) {
-    const validation = jwt.verify(authorization, this._secret) as jwt.JwtPayload;
-    // https://stackoverflow.com/questions/68115189/argument-of-type-string-jwtpayload-is-not-assignable-to-parameter-of-type-s
-    await this.findUser(validation.data);
-    return this._user.role;
+    try {
+      const validation = jwt.verify(authorization, this._secret) as jwt.JwtPayload;
+      // https://stackoverflow.com/questions/68115189/argument-of-type-string-jwtpayload-is-not-assignable-to-parameter-of-type-s
+      await this.findUser(validation.data);
+      return this._user.role;
+    } catch (error) {
+      return null;
+    }
   }
 }
 

@@ -42,12 +42,19 @@ export default class MatchController {
         return res.status(201).json(Match);
       }
     }
-    return res.status(400).json({ message: 'Sem token' });
+    return res.status(401).json({ message: 'Token must be a valid token' });
   }
 
   public async endMatch(req: Request, res: Response) {
     const id = Number(req.params.id);
     await this.service.endMatch(id);
+    return res.status(200).json({ message: 'Finished' });
+  }
+
+  public async editMatch(req: Request, res: Response) {
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const id = Number(req.params.id);
+    await this.service.editMatch(homeTeamGoals, awayTeamGoals, id);
     return res.status(200).json({ message: 'Finished' });
   }
 }

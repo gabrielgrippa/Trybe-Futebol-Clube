@@ -39,9 +39,13 @@ class MatchService {
   }
 
   public async endMatch(id: number) {
-    const asd = await Match.update({ inProgress: false }, { where: { id } });
+    await Match.update({ inProgress: false }, { where: { id } });
     this._done = true;
-    console.log(asd);
+  }
+
+  public async editMatch(homeTG: number, awayTG: number, id: number) {
+    await Match.update({ homeTeamGoals: homeTG, awayTeamGoals: awayTG }, { where: { id } });
+    this._done = true;
   }
 }
 
