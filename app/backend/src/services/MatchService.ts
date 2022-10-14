@@ -5,6 +5,7 @@ import INewMatch from '../entities/INewMatch';
 class MatchService {
   private _Matches: Match[] ;
   private _NewMatch: Match;
+  private _done: boolean;
 
   public async getAllMatches() {
     const ast = await Match.findAll({
@@ -35,6 +36,12 @@ class MatchService {
     });
     this._NewMatch = result;
     return this._NewMatch;
+  }
+
+  public async endMatch(id: number) {
+    const asd = await Match.update({ inProgress: false }, { where: { id } });
+    this._done = true;
+    console.log(asd);
   }
 }
 

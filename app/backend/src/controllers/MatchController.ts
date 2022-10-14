@@ -27,14 +27,27 @@ export default class MatchController {
 
   public async addNewMatch(req: Request, res: Response) {
     const token = req.headers.authorization;
+    const { homeTeam, awayTeam } = req.body;
+    if (homeTeam === awayTeam) {
+      return res.status(401)
+        .json({ message: 'It is not possible to create a match with two equal teams' });
+    }
+    if (homeTeam > 16 || awayTeam > 16) {
+      return res.status(404).json({ message: 'There is no team with such id!' });
+    }
     if (token) {
       const role = await this.userService.validate(token);
-      console.log(role);
       if (role) {
         const Match = await this.service.addNewMatch(req.body);
         return res.status(201).json(Match);
       }
     }
-    return res.status(400).json({ message: 'Deu ruim' });
+    return res.status(400).json({ message: 'Sem token' });
+  }
+
+  public async endMatch(req: Request, res: Response) {
+    const id = Number(req.params.id);
+    await this.service.endMatch(id);
+    return res.status(200).json({ message: 'Finished' });
   }
 }
